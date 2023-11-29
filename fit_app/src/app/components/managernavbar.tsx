@@ -9,7 +9,7 @@ const ManagerNavbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="logo-container text-left">
-        <img src="/FitApp.png" alt="Logo" className="img-fluid logo" />
+        <Imgage src="/FitApp.png" alt="Logo" className="img-fluid logo" />
         <span className="hi-manager">Hi Manager! 💪🏻💪🏻</span>
       </div>
       <li className="navbar-item">

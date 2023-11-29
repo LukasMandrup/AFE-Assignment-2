@@ -51,7 +51,7 @@ const LoginPage = () => {
         <div className="col-md-6">
           <div className="login-container">
             <div className="logo-container text-center w-1">
-              <img src="/FitApp.png" alt="Logo" className="img-fluid w-1" />
+              <Imgage src="/FitApp.png" alt="Logo" className="img-fluid w-1" />
             </div>
             <h1 className="text-center">Welcome to Fit App</h1>
             <form onSubmit={handleSubmit}>

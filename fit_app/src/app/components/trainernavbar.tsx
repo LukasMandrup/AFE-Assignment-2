@@ -42,7 +42,7 @@ const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
 
   useEffect(() => {
     fetchClients();
-  }, [jwtToken]);
+  }, [jwtToken, fetchClients]);
 
   const handlePlusButtonClick = () => {
     setFormVisibility(true);
@@ -69,7 +69,7 @@ const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
   return (
     <nav className="navbar">
       <div className="logo-container text-left">
-        <img src="/FitApp.png" alt="Logo" className="img-fluid logo" />
+        <Image src="/FitApp.png" alt="Logo" className="img-fluid logo" />
         <span className="hi-trainer">Hi Trainer! 💪🏻💪🏻</span>
       </div>
       <ul className="navbar-list">

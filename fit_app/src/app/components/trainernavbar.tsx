@@ -211,7 +211,8 @@ const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
 			</nav>
 		);
 	};
+}
 
-	export default TrainerNavbar;
+export default TrainerNavbar;
 
 

@@ -1,117 +1,124 @@
 // components/TrainerNavbar.tsx
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ClientForm from './clientform';
 import { Button } from '@mui/material';
 import User from '../types/user';
 import ProgramForm from './programform';
 
 interface ClientListProps {
-  jwtToken: string;
+	jwtToken: string;
 }
 
 const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
-  const [isToolboxVisible, setToolboxVisibility] = useState(false);
-  const [clients, setClients] = useState<User[]>([]);
-  const [isFormVisible, setFormVisibility] = useState(false);
-  const [isWorkoutFormVisible, setWorkoutFormVisibility] = useState(false);
-  const [selectedClient, setSelectedClient] = useState<User | null>(null);
+	const [isToolboxVisible, setToolboxVisibility] = useState(false);
+	const [clients, setClients] = useState<User[]>([]);
+	const [isFormVisible, setFormVisibility] = useState(false);
+	const [isWorkoutFormVisible, setWorkoutFormVisibility] = useState(false);
+	const [selectedClient, setSelectedClient] = useState<User | null>(null);
 
-  const handleToggleToolbox = () => {
-    setToolboxVisibility(!isToolboxVisible);
-  };
+	const handleToggleToolbox = () => {
+		setToolboxVisibility(!isToolboxVisible);
+	};
 
-  const fetchClients = () => {
-    if (jwtToken !== null) {
-      fetch('https://afefitness2023.azurewebsites.net/api/Users/Clients', {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Network response was not ok. Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data: User[]) => setClients(data))
-        .catch((error) => console.error('Error fetching clients:', error.message));
-    }
-  };
+	const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
+		const [isToolboxVisible, setToolboxVisibility] = useState(false);
+		const [clients, setClients] = useState<User[]>([]);
+		const [isFormVisible, setFormVisibility] = useState(false);
+		const [isWorkoutFormVisible, setWorkoutFormVisibility] = useState(false);
+		const [selectedClient, setSelectedClient] = useState<User | null>(null);
 
-  useEffect(() => {
-    fetchClients();
-  }, [jwtToken, fetchClients]);
+		const fetchClients = useCallback(() => {
+			if (jwtToken !== null) {
+				fetch('https://afefitness2023.azurewebsites.net/api/Users/Clients', {
+					headers: {
+						Authorization: `Bearer ${jwtToken}`,
+						'Content-Type': 'application/json',
+					},
+				})
+					.then((response) => {
+						if (!response.ok) {
+							throw new Error(`Network response was not ok. Status: ${response.status}`);
+						}
+						return response.json();
+					})
+					.then((data: User[]) => setClients(data))
+					.catch((error) => console.error('Error fetching clients:', error.message));
+			}
+		}, [jwtToken]);
 
-  const handlePlusButtonClick = () => {
-    setFormVisibility(true);
-  };
+		useEffect(() => {
+			fetchClients();
+		}, [jwtToken, fetchClients]);
 
-  const closeForm = () => {
-    setFormVisibility(false);
-    fetchClients();
-  };
+		const handlePlusButtonClick = () => {
+			setFormVisibility(true);
+		};
 
-  const handleWorkoutButtonClick = (client: User) => {
-    setSelectedClient(client);
-    setWorkoutFormVisibility(true);
-  };
+		const closeForm = () => {
+			setFormVisibility(false);
+			fetchClients();
+		};
 
-  const closeWorkoutForm = () => {
-    setWorkoutFormVisibility(false);
-  };
+		const handleWorkoutButtonClick = (client: User) => {
+			setSelectedClient(client);
+			setWorkoutFormVisibility(true);
+		};
 
-  const handleLogout = () => {
-    window.location.href = "/login";
-  };
+		const closeWorkoutForm = () => {
+			setWorkoutFormVisibility(false);
+		};
 
-  return (
-    <nav className="navbar">
-      <div className="logo-container text-left">
-        <Image src="/FitApp.png" alt="Logo" className="img-fluid logo" />
-        <span className="hi-trainer">Hi Trainer! 💪🏻💪🏻</span>
-      </div>
-      <ul className="navbar-list">
-        <li className="navbar-item">
-          <Button className="plus-button" onClick={handlePlusButtonClick} style={{ backgroundColor: '#1B4026A6', color: 'white', fontSize: '12px', }}>
-            Add Client
-          </Button>
-        </li>
-        <li className="navbar-item">
-          <Button
-            className="list-button" onClick={handleToggleToolbox} style={{ backgroundColor: '#1B4026A6 ', color: 'white', fontSize: '12px', }}>
-            Clients List
-          </Button>
-          {isToolboxVisible && (
-            <div className="toolbox">
-              Clients:
-              {clients.map((user) => (
-                <div key={user.userId} className="toolbox-item" style={{ border: '1px solid #1b4027', padding: '15px', textAlign: 'center' }}>
-                  {`${user.firstName} ${user.lastName}`.substring(0, 12)}
-                  {`${user.firstName} ${user.lastName}`.length > 12 && '...'}
-                  <Button
-                    className="work-button"
-                    onClick={() => handleWorkoutButtonClick(user)}
-                    style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '12px', borderRadius: '0%' }}
-                  >
-                    Add Program
-                  </Button>
-                </div>
-              ))}
-              <ProgramForm isOpen={isWorkoutFormVisible} onRequestClose={closeWorkoutForm} client={selectedClient} jwtToken={jwtToken} />
-            </div>
-          )}
-        </li>
-        <li className="navbar-item">
-          <Button className="logout-button" onClick={handleLogout} style={{ backgroundColor: '#FF292961', color: '#1b4027', fontSize: '12px', }}>
-            Log out↩
-          </Button>
-        </li>
-      </ul>
-      {/* Conditionally render the form */}
-      <ClientForm isOpen={isFormVisible} onRequestClose={closeForm} jwtToken={jwtToken} />
-      <style jsx>{`
+		const handleLogout = () => {
+			window.location.href = "/login";
+		};
+
+		return (
+			<nav className="navbar">
+				<div className="logo-container text-left">
+					<Image src="/FitApp.png" alt="Logo" className="img-fluid logo" />
+					<span className="hi-trainer">Hi Trainer! 💪🏻💪🏻</span>
+				</div>
+				<ul className="navbar-list">
+					<li className="navbar-item">
+						<Button className="plus-button" onClick={handlePlusButtonClick} style={{ backgroundColor: '#1B4026A6', color: 'white', fontSize: '12px', }}>
+							Add Client
+						</Button>
+					</li>
+					<li className="navbar-item">
+						<Button
+							className="list-button" onClick={handleToggleToolbox} style={{ backgroundColor: '#1B4026A6 ', color: 'white', fontSize: '12px', }}>
+							Clients List
+						</Button>
+						{isToolboxVisible && (
+							<div className="toolbox">
+								Clients:
+								{clients.map((user) => (
+									<div key={user.userId} className="toolbox-item" style={{ border: '1px solid #1b4027', padding: '15px', textAlign: 'center' }}>
+										{`${user.firstName} ${user.lastName}`.substring(0, 12)}
+										{`${user.firstName} ${user.lastName}`.length > 12 && '...'}
+										<Button
+											className="work-button"
+											onClick={() => handleWorkoutButtonClick(user)}
+											style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '12px', borderRadius: '0%' }}
+										>
+											Add Program
+										</Button>
+									</div>
+								))}
+								<ProgramForm isOpen={isWorkoutFormVisible} onRequestClose={closeWorkoutForm} client={selectedClient} jwtToken={jwtToken} />
+							</div>
+						)}
+					</li>
+					<li className="navbar-item">
+						<Button className="logout-button" onClick={handleLogout} style={{ backgroundColor: '#FF292961', color: '#1b4027', fontSize: '12px', }}>
+							Log out↩
+						</Button>
+					</li>
+				</ul>
+				{/* Conditionally render the form */}
+				<ClientForm isOpen={isFormVisible} onRequestClose={closeForm} jwtToken={jwtToken} />
+				<style jsx>{`
           .navbar {
             display: flex;
             align-items: center;
@@ -201,10 +208,10 @@ const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
             font-size: 14px; 
           }
         `}</style>
-    </nav>
-  );
-};
+			</nav>
+		);
+	};
 
-export default TrainerNavbar;
+	export default TrainerNavbar;
 
 

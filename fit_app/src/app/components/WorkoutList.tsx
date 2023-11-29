@@ -4,6 +4,7 @@ import ExerciseForm from './ExerciseForm';
 import Exercise from '../types/Exercise';
 import '../trainer/trainer.css';
 
+
 interface WorkoutListProps {
   jwtToken: string;
 }

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import jwt from 'jsonwebtoken';
 import './login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Image from 'next/image';
 
 
 const LoginPage = () => {
@@ -51,7 +52,7 @@ const LoginPage = () => {
         <div className="col-md-6">
           <div className="login-container">
             <div className="logo-container text-center w-1">
-              <Imgage src="/FitApp.png" alt="Logo" className="img-fluid w-1" />
+              <Image src="/FitApp.png" alt="Logo" className="img-fluid w-1" />
             </div>
             <h1 className="text-center">Welcome to Fit App</h1>
             <form onSubmit={handleSubmit}>

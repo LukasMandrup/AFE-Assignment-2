@@ -1,5 +1,6 @@
 // components/ManagerNavbar.tsx
 import { Button } from '@mui/material';
+import Image from 'next/image';
 
 const handleLogout = () => {
   window.location.href = "/login";
@@ -9,7 +10,7 @@ const ManagerNavbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="logo-container text-left">
-        <Imgage src="/FitApp.png" alt="Logo" className="img-fluid logo" />
+        <Image src="/FitApp.png" alt="Logo" className="img-fluid logo" />
         <span className="hi-manager">Hi Manager! 💪🏻💪🏻</span>
       </div>
       <li className="navbar-item">

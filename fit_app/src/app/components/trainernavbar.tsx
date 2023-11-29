@@ -5,6 +5,7 @@ import ClientForm from './clientform';
 import { Button } from '@mui/material';
 import User from '../types/user';
 import ProgramForm from './programform';
+import Image from 'next/image';
 
 interface ClientListProps {
 	jwtToken: string;

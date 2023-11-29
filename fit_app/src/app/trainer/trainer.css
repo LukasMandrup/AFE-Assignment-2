@@ -1,0 +1,56 @@
+.client-box {
+  border: 5px solid #1b4027;
+  padding: 10px;
+  cursor: pointer;
+  width: 230px;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out, border-color 0.3s ease-in-out;
+  background: linear-gradient(-45deg, #006400 0%, #00FF00 25%, yellow 51%, #ffffff 100%);
+  background-size: 400% 400%;
+  animation: animateBackground 20s ease infinite;
+}
+
+.client-box:hover {
+  background-color: #00ff51;
+  border-color: #00ff51; /* Change border color on hover */
+  background-size: 200% 200%; /* Adjust the size for hover */
+  transform: scale(1.05); /* Increase scale on hover */
+}
+
+.client-box.selected {
+  border-color: rgb(58, 240, 12);
+  transform: scale(1.1);
+  opacity: 0.8;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  background-color: #00ff51; /* Change background color on selected */
+  background-size: 200% 200%; /* Adjust the size for selected */
+}
+
+.client-box.selected:hover {
+  transform: scale(1.1); /* Increase scale on hover for selected state */
+}
+
+.card {
+  height: 100%;
+}
+
+.client-box:hover .card {
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.program-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@keyframes animateBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

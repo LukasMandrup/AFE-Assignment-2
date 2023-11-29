@@ -105,7 +105,7 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, clien
                         renderValue={(selected) => (selected as []).join(', ')}
                     >
                         {allExercises.map((exercise) => (
-                            <MenuItem value={exercise}>
+							<MenuItem key={exercise} value={exercise}>
                                 <ListItemText primary={exercise} />
                             </MenuItem>
                         ))}

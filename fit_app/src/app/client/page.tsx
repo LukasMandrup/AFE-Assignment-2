@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import ClientNavbar from '../components/clientnavbar';
 import { Box } from '@mui/material';
 import ClientWorkoutList from '../components/ClientWorkoutList';
+import '../login/login.css';
 
 const Trainer: React.FC = () => {
 	const [jwtToken, setJwtToken] = useState<string | null>(null);

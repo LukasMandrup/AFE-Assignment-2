@@ -16,7 +16,7 @@ const Trainer: React.FC = () => {
 	}, []);
 
 	return (
-		<div className = 'container'>
+		<div>
 			<div>
 				<TrainerNavbar jwtToken={jwtToken} />
 				<Box display="flex" justifyContent="center" alignItems="center" height="1vh">

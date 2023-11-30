@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select, MenuItem, InputLabel, FormControl, ListItemText, } from '@mui/material';
 import User from '../types/user';
 import WorkoutProgram from '../types/WorkoutProgram';
+import Exercise from '../types/Exercise';
 
 interface ProgramFormProps {
 	isOpen: boolean;
 	onRequestClose: () => void;
 	client: User | null;
-	jwtToken: string|null;
+	jwtToken: string | null;
 
 }
 
@@ -100,11 +101,10 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, clien
 						name="exercises"
 						multiple
 						value={formData.exercises}
-						// onChange={handleChange} // TODO: Implement correctly
-						renderValue={(selected) => (selected as []).join(', ')}
+						renderValue={(selected) => (selected).join(', ')}
 					>
-						{allExercises.map((exercise) => (
-							<MenuItem key={exercise} value={exercise}>
+						{allExercises.map((exercise, index) => (
+							<MenuItem key={index} value={exercise}>
 								<ListItemText primary={exercise} />
 							</MenuItem>
 						))}

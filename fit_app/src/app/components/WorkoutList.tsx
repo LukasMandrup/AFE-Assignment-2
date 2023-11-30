@@ -5,21 +5,20 @@ import Exercise from '../types/Exercise';
 import '../trainer/trainer.css';
 
 
-
 interface WorkoutListProps {
 	jwtToken: string | null;
+	shouldTriggerRefetch: boolean;
 }
 interface WorkoutProgramWithColor extends WorkoutProgram {
 	color: string;
-  }
+}
 
-const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
+const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken, shouldTriggerRefetch }) => {
 	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgramWithColor[]>([]);
 	const [selectedWorkoutProgramId, setSelectedWorkoutProgramId] = useState<number | null>(null);
 	const [selectedWorkoutProgramDetails, setSelectedWorkoutProgramDetails] = useState<WorkoutProgram | null>(null);
 	const [clientNames, setClientNames] = useState<{ [key: number]: string }>({});
 	const [showExerciseForm, setShowExerciseForm] = useState<boolean>(false);
-	
 
 	const getRandomColor = () => {
 		const letters = '0123456789ABCDEF';
@@ -32,28 +31,28 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 
 	useEffect(() => {
 		if (jwtToken !== null) {
-		  fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
-			headers: {
-			  Authorization: `Bearer ${jwtToken}`,
-			  'Content-Type': 'application/json',
-			},
-		  })
-			.then((response) => {
-			  if (!response.ok) {
-				throw new Error(`Network response was not ok. Status: ${response.status}`);
-			  }
-			  return response.json();
+			fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
+				headers: {
+					Authorization: `Bearer ${jwtToken}`,
+					'Content-Type': 'application/json',
+				},
 			})
-			.then((data: WorkoutProgram[]) => {
-			  const programsWithRandomColors = data.map((program) => ({
-				...(program as WorkoutProgramWithColor),
-				color: getRandomColor(),
-			  }));
-			  setWorkoutPrograms(programsWithRandomColors);
-			})
-			.catch((error) => console.error('Error fetching workout programs:', error.message));
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error(`Network response was not ok. Status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then((data: WorkoutProgram[]) => {
+					const programsWithRandomColors = data.map((program) => ({
+						...(program as WorkoutProgramWithColor),
+						color: getRandomColor(),
+					}));
+					setWorkoutPrograms(programsWithRandomColors);
+				})
+				.catch((error) => console.error('Error fetching workout programs:', error.message));
 		}
-	  }, [jwtToken]);
+	}, [jwtToken, shouldTriggerRefetch]);
 
 	useEffect(() => {
 		const fetchClientName = async (clientId: number) => {

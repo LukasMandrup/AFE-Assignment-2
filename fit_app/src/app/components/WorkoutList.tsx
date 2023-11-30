@@ -9,13 +9,17 @@ import '../trainer/trainer.css';
 interface WorkoutListProps {
 	jwtToken: string | null;
 }
+interface WorkoutProgramWithColor extends WorkoutProgram {
+	color: string;
+  }
 
 const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
-	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([]);
+	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgramWithColor[]>([]);
 	const [selectedWorkoutProgramId, setSelectedWorkoutProgramId] = useState<number | null>(null);
 	const [selectedWorkoutProgramDetails, setSelectedWorkoutProgramDetails] = useState<WorkoutProgram | null>(null);
 	const [clientNames, setClientNames] = useState<{ [key: number]: string }>({});
 	const [showExerciseForm, setShowExerciseForm] = useState<boolean>(false);
+	
 
 	const getRandomColor = () => {
 		const letters = '0123456789ABCDEF';
@@ -28,28 +32,28 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 
 	useEffect(() => {
 		if (jwtToken !== null) {
-			fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
-				headers: {
-					Authorization: `Bearer ${jwtToken}`,
-					'Content-Type': 'application/json',
-				},
+		  fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
+			headers: {
+			  Authorization: `Bearer ${jwtToken}`,
+			  'Content-Type': 'application/json',
+			},
+		  })
+			.then((response) => {
+			  if (!response.ok) {
+				throw new Error(`Network response was not ok. Status: ${response.status}`);
+			  }
+			  return response.json();
 			})
-				.then((response) => {
-					if (!response.ok) {
-						throw new Error(`Network response was not ok. Status: ${response.status}`);
-					}
-					return response.json();
-				})
-				.then((data: WorkoutProgram[]) => {
-					const programsWithColors = data.map((program) => ({
-						...program,
-						color: getRandomColor(),
-					}));
-					setWorkoutPrograms(programsWithColors);
-				})
-				.catch((error) => console.error('Error fetching workout programs:', error.message));
+			.then((data: WorkoutProgram[]) => {
+			  const programsWithRandomColors = data.map((program) => ({
+				...(program as WorkoutProgramWithColor),
+				color: getRandomColor(),
+			  }));
+			  setWorkoutPrograms(programsWithRandomColors);
+			})
+			.catch((error) => console.error('Error fetching workout programs:', error.message));
 		}
-	}, [jwtToken]);
+	  }, [jwtToken]);
 
 	useEffect(() => {
 		const fetchClientName = async (clientId: number) => {
@@ -184,7 +188,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 				<div
 					key={program.workoutProgramId}
 					onClick={() => handleBoxClick(program.workoutProgramId)}
-					className={`col-md-6 mb-4 client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
+					className={`client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
 					style={{
 						backgroundColor: program.color,
 						backgroundImage: `linear-gradient(to bottom right, ${program.color}, white 90%)`,

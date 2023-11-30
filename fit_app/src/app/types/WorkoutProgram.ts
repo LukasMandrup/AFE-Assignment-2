@@ -7,7 +7,6 @@ interface WorkoutProgram {
 	exercises: Exercise[];
 	personalTrainerId: number;
 	clientId: number;
-	color: string; // Add the color property
   }
   
   export default WorkoutProgram;

@@ -9,7 +9,7 @@ interface ClientListProps {
   jwtToken: string|null;
 }
 
-const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
+const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken}) => {
   const [isToolboxVisible, setToolboxVisibility] = useState(false);
   const [clients, setClients] = useState<User[]>([]);
   const [isFormVisible, setFormVisibility] = useState(false);
@@ -148,6 +148,7 @@ const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
           }
 
           .toolbox {
+            z-index: 1;
             position: absolute;
             top: 100%;
             left: 0;

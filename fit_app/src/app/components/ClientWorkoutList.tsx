@@ -5,13 +5,15 @@ import '../trainer/trainer.css';
 interface ClientWorkoutListProps {
 	jwtToken: string | null;
 }
+interface WorkoutProgramWithColor extends WorkoutProgram {
+	color: string;
+  }
 
 const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
-	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([]);
+	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgramWithColor[]>([]);
 	const [selectedWorkoutProgramId, setSelectedWorkoutProgramId] = useState<number | null>(null);
 	const [selectedWorkoutProgramDetails, setSelectedWorkoutProgramDetails] = useState<WorkoutProgram | null>(null);
 	const [clientNames, setClientNames] = useState<{ [key: number]: string }>({});
-	const [showExerciseForm, setShowExerciseForm] = useState<boolean>(false);
 
 	const getRandomColor = () => {
 		const letters = '0123456789ABCDEF';
@@ -24,28 +26,28 @@ const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
 
 	useEffect(() => {
 		if (jwtToken !== null) {
-			fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
-				headers: {
-					Authorization: `Bearer ${jwtToken}`,
-					'Content-Type': 'application/json',
-				},
+		  fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
+			headers: {
+			  Authorization: `Bearer ${jwtToken}`,
+			  'Content-Type': 'application/json',
+			},
+		  })
+			.then((response) => {
+			  if (!response.ok) {
+				throw new Error(`Network response was not ok. Status: ${response.status}`);
+			  }
+			  return response.json();
 			})
-				.then((response) => {
-					if (!response.ok) {
-						throw new Error(`Network response was not ok. Status: ${response.status}`);
-					}
-					return response.json();
-				})
-				.then((data: WorkoutProgram[]) => {
-					const programsWithColors = data.map((program) => ({
-						...program,
-						color: getRandomColor(),
-					}));
-					setWorkoutPrograms(programsWithColors);
-				})
-				.catch((error) => console.error('Error fetching workout programs:', error.message));
+			.then((data: WorkoutProgram[]) => {
+			  const programsWithRandomColors = data.map((program) => ({
+				...(program as WorkoutProgramWithColor),
+				color: getRandomColor(),
+			  }));
+			  setWorkoutPrograms(programsWithRandomColors);
+			})
+			.catch((error) => console.error('Error fetching workout programs:', error.message));
 		}
-	}, [jwtToken]);
+	  }, [jwtToken]);
 
 	useEffect(() => {
 		const fetchClientName = async (clientId: number) => {
@@ -99,7 +101,6 @@ const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
 			setSelectedWorkoutProgramId(programId);
 			let foundProgram = workoutPrograms.find((item) => item.workoutProgramId === programId);
 			setSelectedWorkoutProgramDetails(foundProgram || null);
-			setShowExerciseForm(false);
 		}
 	};
 
@@ -111,23 +112,23 @@ const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
 
 
 	return (
-		<div className="program-container">
+		<div>
 			{workoutPrograms.map((program) => (
 				<div
 					key={program.workoutProgramId}
 					onClick={() => handleBoxClick(program.workoutProgramId)}
-					className={`col-md-6 mb-4 client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
+					className={`client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
 					style={{
 						backgroundColor: program.color,
 						backgroundImage: `linear-gradient(to bottom right, ${program.color}, white 90%)`,
 					}}
 				>
-					<div className="card" style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
-						<div className="card-body">
-							<h1 className="card-title">{`${program.name}`}</h1>
-							<p className="card-text">Description: {program.description}</p>
-							<p className="card-text">Amount of Exercises: {program.exercises?.length}</p>
-							<p className="card-text">Client: {program.clientId ? (clientNames[program.clientId] || 'Loading...') : 'No client affiliated with program'}</p>
+					<div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
+						<div >
+						<h1>{`${program.name}`}</h1>
+							<p>Description: {program.description}</p>
+							<p>Amount of Exercises: {program.exercises?.length}</p>
+							<p>Client: {program.clientId ? (clientNames[program.clientId] || 'Loading...') : 'No client affiliated with program'}</p>
 
 							{selectedWorkoutProgramId === program.workoutProgramId && (
 								<div>
@@ -153,4 +154,3 @@ const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
 
 }
 export default ClientWorkoutList;
-

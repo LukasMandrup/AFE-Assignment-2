@@ -8,11 +8,10 @@ interface ProgramFormProps {
 	onRequestClose: () => void;
 	client: User | null;
 	jwtToken: string;
-	onRefetchWorkoutPrograms: () => void;
 
 }
 
-const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, client, jwtToken, onRefetchWorkoutPrograms }) => {
+const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, client, jwtToken }) => {
 	const [formData, setFormData] = useState<WorkoutProgram>({
 		workoutProgramId: 0,
 		name: '',
@@ -74,7 +73,6 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, clien
 			.then((data) => {
 				console.log('Form submitted successfully:', data);
 				onRequestClose();
-				onRefetchWorkoutPrograms();
 			})
 			.catch((error) => {
 				console.error('Error submitting the form:', error.message);

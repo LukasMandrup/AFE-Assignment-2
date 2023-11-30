@@ -10,14 +10,14 @@ const ManagerNavbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="logo-container text-left">
-        <Image src="/FitApp.png" alt="Logo" className="img-fluid logo" />
+        <Image src="/FitApp.png" alt="Logo" width={50} height={50} className="img-fluid logo" />
         <span className="hi-manager">Hi Manager! 💪🏻💪🏻</span>
       </div>
       <li className="navbar-item">
-          <Button className="logout-button" onClick={handleLogout} style={{ backgroundColor: '#FF292961', color: '#1b4027', fontSize: '12px', }}>
-            Log out↩
-          </Button>
-        </li>
+        <Button className="logout-button" onClick={handleLogout} style={{ backgroundColor: '#FF292961', color: '#1b4027', fontSize: '12px', }}>
+          Log out↩
+        </Button>
+      </li>
       <style jsx>{`
         .navbar {
           display: flex;

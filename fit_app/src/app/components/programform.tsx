@@ -7,12 +7,11 @@ interface ProgramFormProps {
 	isOpen: boolean;
 	onRequestClose: () => void;
 	client: User | null;
-	jwtToken: string;
-	onRefetchWorkoutPrograms: () => void;
+	jwtToken: string|null;
 
 }
 
-const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, client, jwtToken, onRefetchWorkoutPrograms }) => {
+const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, client, jwtToken }) => {
 	const [formData, setFormData] = useState<WorkoutProgram>({
 		workoutProgramId: 0,
 		name: '',
@@ -74,7 +73,6 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, clien
 			.then((data) => {
 				console.log('Form submitted successfully:', data);
 				onRequestClose();
-				onRefetchWorkoutPrograms();
 			})
 			.catch((error) => {
 				console.error('Error submitting the form:', error.message);
@@ -112,14 +110,6 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, clien
 						))}
 					</Select>
 				</FormControl>
-				<TextField
-					label="Client ID"
-					InputLabelProps={{ shrink: true }}
-					defaultValue={formData.clientId}
-					disabled
-					fullWidth
-					margin="normal"
-				/>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={onRequestClose} style={{ backgroundColor: 'red', color: 'white' }}>

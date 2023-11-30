@@ -13,7 +13,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ onClose, onAddExercise }) =
 		name: '',
 		description: '',
 		sets: null,
-		time: null,
+		time: '',
 		repetitions: null,
 	});
 
@@ -28,7 +28,7 @@ const ExerciseForm: React.FC<ExerciseFormProps> = ({ onClose, onAddExercise }) =
 		if (name === 'repetitions') {
 			setExerciseData((prevData) => ({
 				...prevData,
-				time: null,
+				time: '',
 			}));
 		}
 

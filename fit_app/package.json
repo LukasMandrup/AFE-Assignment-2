@@ -24,9 +24,9 @@
 	"devDependencies": {
 		"@types/jsonwebtoken": "^9.0.5",
 		"@types/node": "^20",
-		"next": "14.0.2",
 		"eslint": "^8",
 		"eslint-config-next": "14.0.2",
-		"typescript": "^5"
+		"next": "14.0.2",
+		"typescript": "^5.3.2"
 	}
 }

@@ -78,8 +78,7 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ allExercises, isOpen, onReque
 						name="exercises"
 						multiple
 						value={formData.exercises}
-						// onChange={handleChange} // TODO: Implement correctly
-						renderValue={(selected) => (selected as []).join(', ')}
+						renderValue={(selected) => (selected).join(', ')}
 					>
 						{allExercises.map((exercise) => (
 							<MenuItem key={exercise.name} value={exercise.name}>

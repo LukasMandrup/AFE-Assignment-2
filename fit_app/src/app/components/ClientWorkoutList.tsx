@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
 import WorkoutProgram from '../types/WorkoutProgram';
-import ExerciseForm from './ExerciseForm';
-import Exercise from '../types/Exercise';
 import '../trainer/trainer.css';
 
-
-
-interface WorkoutListProps {
+interface ClientWorkoutListProps {
 	jwtToken: string | null;
 }
 
-const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
+const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
 	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([]);
 	const [selectedWorkoutProgramId, setSelectedWorkoutProgramId] = useState<number | null>(null);
 	const [selectedWorkoutProgramDetails, setSelectedWorkoutProgramDetails] = useState<WorkoutProgram | null>(null);
@@ -107,79 +103,15 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 		}
 	};
 
-	const fshowExerciseForm = (e: React.MouseEvent) => {
-		e.stopPropagation();
-		setShowExerciseForm(true);
-	};
-
-	const fhideExerciseForm = () => {
-		setShowExerciseForm(false);
-	};
-
 	const handleLogout = () => {
 		window.location.href = "/login";
-	};
-
-	const fetchUpdatedWorkoutPrograms = async () => {
-		if (jwtToken !== null) {
-			try {
-				const response = await fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
-					headers: {
-						Authorization: `Bearer ${jwtToken}`,
-						'Content-Type': 'application/json',
-					},
-				});
-
-				if (!response.ok) {
-					throw new Error(`Network response was not ok. Status: ${response.status}`);
-				}
-
-				const data = await response.json();
-				return data;
-			} catch (error) {
-				console.error('Error fetching updated workout programs:', (error as Error).message);
-				throw error;
-			}
-		}
-	};
-
-	const handleAddExercise = async (exercise: Exercise) => {
-		try {
-			// Ensure there's a selected workout program
-			if (!selectedWorkoutProgramDetails) {
-				console.error('No selected workout program.');
-				return;
-			}
-			console.log(exercise)
-			const response = await fetch(`https://afefitness2023.azurewebsites.net/api/Exercises/Program/${selectedWorkoutProgramDetails.workoutProgramId}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${jwtToken}`,
-				},
-				body: JSON.stringify(exercise),
-			});
-
-			if (!response.ok) {
-				throw new Error(`Error adding exercise. Status: ${response.status}`);
-			}
-
-			// Fetch updated list of workout programs
-			const updatedPrograms = await fetchUpdatedWorkoutPrograms();
-			setWorkoutPrograms(updatedPrograms);
-
-			fhideExerciseForm();
-		} catch (error) {
-			console.error('Error adding exercise:', (error as Error).message);
-		}
-
 	};
 
 
 
 
 	return (
-		<div className="program-container">
+		<div>
 			{workoutPrograms.map((program) => (
 				<div
 					key={program.workoutProgramId}
@@ -191,7 +123,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 					}}
 				>
 					<div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
-						<div>
+						<div >
 							<h1>{`${program.name}`}</h1>
 							<p>Description: {program.description}</p>
 							<p>Amount of Exercises: {program.exercises?.length}</p>
@@ -209,45 +141,16 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 											<p>Reps/Time: {exercise.repetitions ? (exercise.repetitions) : exercise.time}</p>
 											<p>Sets: {exercise.sets ? (exercise.sets) : exercise.time}</p>
 										</div>
-
 									))}
-									<div
-										style={{
-											display: 'flex',
-											justifyContent: 'center',
-											alignItems: 'center',
-											position: 'relative',
-											bottom: 0,
-											left: 0,
-											right: 0,
-											top: 10,
-										}}>
-										<button
-											className="btn btn-success"
-											onClick={(e) => fshowExerciseForm(e)}
-											style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '15px', borderRadius: '20%' }}
-										>
-											Add Exercise
-										</button>
-									</div>
 								</div>
 							)}
 						</div>
-
-
 					</div>
 				</div>
 			))}
-			{showExerciseForm && (
-				<ExerciseForm
-					onClose={fhideExerciseForm}
-					onAddExercise={handleAddExercise}
-					onRefetchWorkoutPrograms={fetchUpdatedWorkoutPrograms}
-				/>
-			)}
 		</div>
 	);
 
 }
-export default WorkoutList;
+export default ClientWorkoutList;
 

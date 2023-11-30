@@ -1,11 +1,9 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import TrainerNavbar from '../components/trainernavbar';
+import ClientNavbar from '../components/clientnavbar';
 import { Box } from '@mui/material';
-import WorkoutList from '../components/WorkoutList';
-import './trainer.css';
+import ClientWorkoutList from '../components/ClientWorkoutList';
 import '../login/login.css';
-
 
 const Trainer: React.FC = () => {
 	const [jwtToken, setJwtToken] = useState<string | null>(null);
@@ -18,11 +16,11 @@ const Trainer: React.FC = () => {
 	return (
 		<div>
 			<div>
-				<TrainerNavbar jwtToken={jwtToken} />
+				<ClientNavbar/>
 				<Box display="flex" justifyContent="center" alignItems="center" height="1vh">
 				</Box>
 			</div>
-			<WorkoutList jwtToken={jwtToken} />
+			<ClientWorkoutList jwtToken={jwtToken} />
 		</div>
 	);
 };

@@ -3,17 +3,18 @@
   padding: 30px;
   cursor: pointer;
   width: 230px;
+  box-sizing: content-box;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out, border-color 0.3s ease-in-out;
   background: linear-gradient(-45deg, #006400 0%, #00FF00 25%, yellow 51%, #ffffff 100%);
-  background-size: 400% 400%;
+  background-size: 100% 100%;
   animation: animateBackground 20s ease infinite;
 }
 
 .client-box:hover {
   background-color: #00ff51;
-  border-color: #00ff51; 
-  background-size: 200% 200%; 
-  transform: scale(1.01); 
+  border-color: #00ff51;
+  background-size: 200% 200%;
+  transform: scale(1.01);
 }
 
 .client-box.selected {
@@ -21,12 +22,12 @@
   transform: scale(1.0);
   opacity: 0.8;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  background-color: #00ff51; 
-  background-size: 200% 200%; 
+  background-color: #00ff51;
+  background-size: 200% 200%;
 }
 
 .client-box.selected:hover {
-  transform: scale(1.0); 
+  transform: scale(1.0);
 }
 
 .card {
@@ -43,13 +44,16 @@
   gap: 10px;
 }
 
+
 @keyframes animateBackground {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }

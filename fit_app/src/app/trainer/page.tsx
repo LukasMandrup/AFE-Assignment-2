@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import TrainerNavbar from '../components/trainernavbar';
 import { Box } from '@mui/material';
 import WorkoutList from '../components/WorkoutList';
+import './trainer.css';
+import '../login/login.css';
+
 
 const Trainer: React.FC = () => {
 	const [jwtToken, setJwtToken] = useState<string | null>(null);
@@ -13,7 +16,7 @@ const Trainer: React.FC = () => {
 	}, []);
 
 	return (
-		<div>
+		<div className = 'container'>
 			<div>
 				<TrainerNavbar jwtToken={jwtToken} />
 				<Box display="flex" justifyContent="center" alignItems="center" height="1vh">

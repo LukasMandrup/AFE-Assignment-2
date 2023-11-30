@@ -1,5 +1,5 @@
 interface Exercise {
-    name: string | null;
+    name: string;
     description: string | null ;
     sets: number | null ;
     repetitions: number | null ;

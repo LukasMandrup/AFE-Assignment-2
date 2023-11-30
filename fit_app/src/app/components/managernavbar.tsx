@@ -10,12 +10,12 @@ const ManagerNavbar: React.FC = () => {
 				<Image src="/FitApp.png" alt="Logo" width={50} height={50} className="img-fluid logo" />
 				<span className="hi-manager">Hi Manager! 💪🏻💪🏻</span>
 			</div>
-			<li className="navbar-item">
+			<div className="navbar-item">
 				<Link
 					href='/login'>
 					Log out↩
 				</Link>
-			</li>
+			</div>
 		</nav>
 	);
 };

@@ -7,7 +7,7 @@ import '../trainer/trainer.css';
 
 
 interface WorkoutListProps {
-	jwtToken: string;
+	jwtToken: string | null;
 }
 
 const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {

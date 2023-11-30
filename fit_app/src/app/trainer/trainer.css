@@ -3,7 +3,6 @@
   padding: 30px;
   cursor: pointer;
   width: 230px;
-  box-sizing: content-box;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out, border-color 0.3s ease-in-out;
   background: linear-gradient(-45deg, #006400 0%, #00FF00 25%, yellow 51%, #ffffff 100%);
   background-size: 100% 100%;
@@ -42,6 +41,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  background: linear-gradient(-45deg, #003300 0%, #006600 25%, #99cc00 51%, #00cccc 100%);
+  background-size: 400% 400%;
+  animation: animateBackground 20s ease infinite;
+  margin: 0;
+  font-family: 'Your Font Here', sans-serif;
 }
 
 

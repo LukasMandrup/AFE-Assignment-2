@@ -4,7 +4,6 @@ import ManagerNavbar from '../components/managernavbar';
 import { Button, Box } from '@mui/material';
 import TrainerForm from '../components/trainerform';
 import { JwtPayload } from 'jsonwebtoken';
-import '../login/login.css';
 
 const UserForm: React.FC = () => {
   const [isTrainerFormVisible, setTrainerFormVisibility] = useState(false);

@@ -145,7 +145,6 @@ const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {
           .navbar-item {
             cursor: pointer;
             position: relative;
-            z-index: 1;
           }
 
           .toolbox {

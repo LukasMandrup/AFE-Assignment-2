@@ -184,7 +184,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 				<div
 					key={program.workoutProgramId}
 					onClick={() => handleBoxClick(program.workoutProgramId)}
-					className={`client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
+					className={`col-md-6 mb-4 client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
 					style={{
 						backgroundColor: program.color,
 						backgroundImage: `linear-gradient(to bottom right, ${program.color}, white 90%)`,

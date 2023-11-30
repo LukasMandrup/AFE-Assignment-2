@@ -111,23 +111,23 @@ const ClientWorkoutList: React.FC<ClientWorkoutListProps> = ({ jwtToken }) => {
 
 
 	return (
-		<div>
+		<div className="program-container">
 			{workoutPrograms.map((program) => (
 				<div
 					key={program.workoutProgramId}
 					onClick={() => handleBoxClick(program.workoutProgramId)}
-					className={`client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
+					className={`col-md-6 mb-4 client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
 					style={{
 						backgroundColor: program.color,
 						backgroundImage: `linear-gradient(to bottom right, ${program.color}, white 90%)`,
 					}}
 				>
-					<div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
-						<div >
-							<h1>{`${program.name}`}</h1>
-							<p>Description: {program.description}</p>
-							<p>Amount of Exercises: {program.exercises?.length}</p>
-							<p>Client: {program.clientId ? (clientNames[program.clientId] || 'Loading...') : 'No client affiliated with program'}</p>
+					<div className="card" style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
+						<div className="card-body">
+							<h1 className="card-title">{`${program.name}`}</h1>
+							<p className="card-text">Description: {program.description}</p>
+							<p className="card-text">Amount of Exercises: {program.exercises?.length}</p>
+							<p className="card-text">Client: {program.clientId ? (clientNames[program.clientId] || 'Loading...') : 'No client affiliated with program'}</p>
 
 							{selectedWorkoutProgramId === program.workoutProgramId && (
 								<div>

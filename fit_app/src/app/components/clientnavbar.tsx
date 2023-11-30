@@ -3,22 +3,22 @@ import { Button } from '@mui/material';
 import Image from 'next/image';
 
 const handleLogout = () => {
-  window.location.href = "/login";
+	window.location.href = "/login";
 };
 
 const ClientNavbar: React.FC = () => {
-  return (
-    <nav className="navbar">
-      <div className="logo-container text-left">
-        <Image src="/FitApp.png" alt="Logo" width={50} height={50} className="img-fluid logo" />
-        <span className="hi-manager">Hi Client! 💪🏻💪🏻</span>
-      </div>
-      <li className="navbar-item">
-        <Button className="logout-button" onClick={handleLogout} style={{ backgroundColor: '#FF292961', color: '#1b4027', fontSize: '12px', }}>
-          Log out↩
-        </Button>
-      </li>
-      <style jsx>{`
+	return (
+		<nav className="navbar">
+			<div className="logo-container text-left">
+				<Image src="/FitApp.png" alt="Logo" width={50} height={50} className="img-fluid logo" />
+				<span className="hi-manager">Hi Client! 💪🏻💪🏻</span>
+			</div>
+			<div className="navbar-item">
+				<Button className="logout-button" onClick={handleLogout} style={{ backgroundColor: '#FF292961', color: '#1b4027', fontSize: '12px' }}>
+					Log out↩
+				</Button>
+			</div>
+			<style jsx>{`
         .navbar {
           display: flex;
           align-items: center;
@@ -44,8 +44,8 @@ const ClientNavbar: React.FC = () => {
           font-weight: bold;
         }
       `}</style>
-    </nav>
-  );
+		</nav>
+	);
 };
 
 export default ClientNavbar;

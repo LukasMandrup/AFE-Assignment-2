@@ -1,17 +1,11 @@
-// components/clientForm.tsx
+'use client'
+import User from "@/app/types/user";
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button } from "@mui/material";
+import React from "react";
+import { ChangeEvent } from "react";
 
-import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Radio, RadioGroup, FormControlLabel } from '@mui/material';
-import jwt from 'jsonwebtoken';
-import User from '../types/user';
-
-interface TrainerFormProps {
-	isOpen: boolean;
-	onRequestClose: () => void;
-}
-
-const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => {
-	let formData: User = ({
+const AddTrainerPage: React.FC = () => {
+	const [formData, setFormData] = React.useState<User>({
 		userId: 0,
 		personalTrainerId: 0,
 		firstName: '',
@@ -21,7 +15,15 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 		accountType: 'PersonalTrainer',
 	});
 
-	const handleSubmit = () => {
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setFormData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+	};
+
+	const handleSubmit = async () => {
 		const dataToSend = {
 			...formData,
 			userId: 0,
@@ -32,7 +34,7 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 		if (jwtToken === null) {
 			return;
 		}
-		fetch('https://afefitness2023.azurewebsites.net/api/Users', {
+		await fetch('https://afefitness2023.azurewebsites.net/api/Users', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -57,8 +59,12 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 		onRequestClose();
 	};
 
+	const onRequestClose = () => {
+		window.location.href = "/manager";
+	}
+
 	return (
-		<Dialog open={isOpen} onClose={onRequestClose}>
+		<div>
 			<DialogTitle>Add Trainer</DialogTitle>
 			<DialogContent>
 				<TextField
@@ -67,6 +73,7 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 					value={formData.firstName}
 					fullWidth
 					margin="normal"
+					onChange={handleChange}
 				/>
 				<TextField
 					label="Last Name"
@@ -74,6 +81,7 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 					value={formData.lastName}
 					fullWidth
 					margin="normal"
+					onChange={handleChange}
 				/>
 				<TextField
 					label="Email"
@@ -81,6 +89,7 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 					value={formData.email}
 					fullWidth
 					margin="normal"
+					onChange={handleChange}
 				/>
 				<TextField
 					label="Password"
@@ -88,6 +97,7 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 					value={formData.password}
 					fullWidth
 					margin="normal"
+					onChange={handleChange}
 				/>
 			</DialogContent>
 			<DialogActions>
@@ -98,8 +108,8 @@ const TrainerForm: React.FC<TrainerFormProps> = ({ isOpen, onRequestClose }) => 
 					Add
 				</Button>
 			</DialogActions>
-		</Dialog>
-	);
+		</div>
+	)
 };
 
-export default TrainerForm;
+export default AddTrainerPage;

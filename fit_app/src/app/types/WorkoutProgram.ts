@@ -1,13 +1,13 @@
 import Exercise from "./Exercise";
 
 interface WorkoutProgram {
-    color: BackgroundColor | undefined;
-    workoutProgramId: number;
-    name: string | null;
-    description: string | null;
-    exercises: Array<Exercise> | null;
-    personalTrainerId: number;
-    clientId: number | null;
+	workoutProgramId: number;
+	name: string;
+	description: string;
+	exercises: Exercise[];
+	personalTrainerId: number;
+	clientId: number;
+	color: string; // Add the color property
   }
   
   export default WorkoutProgram;

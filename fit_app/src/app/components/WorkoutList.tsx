@@ -5,6 +5,7 @@ import Exercise from '../types/Exercise';
 import '../trainer/trainer.css';
 
 
+
 interface WorkoutListProps {
 	jwtToken: string;
 }
@@ -106,7 +107,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 		}
 	};
 
-	const fshowExerciseForm = (e) => {
+	const fshowExerciseForm = (e: React.MouseEvent) => {
 		e.stopPropagation();
 		setShowExerciseForm(true);
 	};
@@ -136,7 +137,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 				const data = await response.json();
 				return data;
 			} catch (error) {
-				console.error('Error fetching updated workout programs:', error.message);
+				console.error('Error fetching updated workout programs:', (error as Error).message);
 				throw error;
 			}
 		}
@@ -169,7 +170,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 
 			fhideExerciseForm();
 		} catch (error) {
-			console.error('Error adding exercise:', error.message);
+			console.error('Error adding exercise:', (error as Error).message);
 		}
 
 	};

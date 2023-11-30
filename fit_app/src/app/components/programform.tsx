@@ -7,7 +7,7 @@ interface ProgramFormProps {
 	isOpen: boolean;
 	onRequestClose: () => void;
 	client: User | null;
-	jwtToken: string;
+	jwtToken: string|null;
 
 }
 

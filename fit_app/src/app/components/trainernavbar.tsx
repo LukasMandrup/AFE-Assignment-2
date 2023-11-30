@@ -6,7 +6,7 @@ import User from '../types/user';
 import ProgramForm from './programform';
 
 interface ClientListProps {
-  jwtToken: string;
+  jwtToken: string|null;
 }
 
 const TrainerNavbar: React.FC<ClientListProps> = ({ jwtToken }) => {

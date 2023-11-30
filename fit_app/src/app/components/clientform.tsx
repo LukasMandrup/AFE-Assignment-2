@@ -8,7 +8,7 @@ import User from '../types/user';
 interface ClientFormProps {
 	isOpen: boolean;
 	onRequestClose: () => void;
-	jwtToken: string;
+	jwtToken: string|null;
 }
 
 const ClientForm: React.FC<ClientFormProps> = ({ isOpen, onRequestClose, jwtToken }) => {
@@ -35,7 +35,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ isOpen, onRequestClose, jwtToke
 	};
 
 	const handleSubmit = () => {
-		var tokendecoded = jwt.decode(jwtToken) as JwtPayload;
+		var tokendecoded = jwt.decode(jwtToken as string) as JwtPayload;
 
 		if (tokendecoded) {
 			const dataToSend = {

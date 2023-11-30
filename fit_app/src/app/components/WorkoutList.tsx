@@ -207,7 +207,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 											<h3>{`${exercise.name ? (exercise.name) : "!Exercise has no name!"}`}</h3>
 											<p>Description: {exercise.description}</p>
 											<p>Reps/Time: {exercise.repetitions ? (exercise.repetitions) : exercise.time}</p>
-											<p>Sets: {exercise.sets ? (exercise.sets) : exercise.time}</p>
+											<p>Sets: {exercise.sets}</p>
 										</div>
 
 									))}

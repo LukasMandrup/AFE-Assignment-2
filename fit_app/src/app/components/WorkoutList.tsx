@@ -6,245 +6,245 @@ import '../trainer/trainer.css';
 
 
 interface WorkoutListProps {
-  jwtToken: string;
+	jwtToken: string;
 }
 
 const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
-  const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([]);
-  const [selectedWorkoutProgramId, setSelectedWorkoutProgramId] = useState<number | null>(null);
-  const [selectedWorkoutProgramDetails, setSelectedWorkoutProgramDetails] = useState<WorkoutProgram | null>(null);
-  const [clientNames, setClientNames] = useState<{ [key: number]: string }>({});
-  const [showExerciseForm, setShowExerciseForm] = useState<boolean>(false);
+	const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([]);
+	const [selectedWorkoutProgramId, setSelectedWorkoutProgramId] = useState<number | null>(null);
+	const [selectedWorkoutProgramDetails, setSelectedWorkoutProgramDetails] = useState<WorkoutProgram | null>(null);
+	const [clientNames, setClientNames] = useState<{ [key: number]: string }>({});
+	const [showExerciseForm, setShowExerciseForm] = useState<boolean>(false);
 
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-  };
+	const getRandomColor = () => {
+		const letters = '0123456789ABCDEF';
+		let color = '#';
+		for (let i = 0; i < 6; i++) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	};
 
-  useEffect(() => {
-    if (jwtToken !== null) {
-      fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`Network response was not ok. Status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data: WorkoutProgram[]) => {
-          const programsWithColors = data.map((program) => ({
-            ...program,
-            color: getRandomColor(),
-          }));
-          setWorkoutPrograms(programsWithColors);
-        })
-        .catch((error) => console.error('Error fetching workout programs:', error.message));
-    }
-  }, [jwtToken]);
+	useEffect(() => {
+		if (jwtToken !== null) {
+			fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
+				headers: {
+					Authorization: `Bearer ${jwtToken}`,
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error(`Network response was not ok. Status: ${response.status}`);
+					}
+					return response.json();
+				})
+				.then((data: WorkoutProgram[]) => {
+					const programsWithColors = data.map((program) => ({
+						...program,
+						color: getRandomColor(),
+					}));
+					setWorkoutPrograms(programsWithColors);
+				})
+				.catch((error) => console.error('Error fetching workout programs:', error.message));
+		}
+	}, [jwtToken]);
 
-  useEffect(() => {
-    const fetchClientName = async (clientId: number) => {
-      try {
-        const response = await fetch(`https://afefitness2023.azurewebsites.net/api/Users/${clientId}`, {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
+	useEffect(() => {
+		const fetchClientName = async (clientId: number) => {
+			try {
+				const response = await fetch(`https://afefitness2023.azurewebsites.net/api/Users/${clientId}`, {
+					headers: {
+						Authorization: `Bearer ${jwtToken}`,
+						'Content-Type': 'application/json',
+					},
+				});
 
-        if (response.status === 404) {
-          setClientNames((prevClientNames) => ({
-            ...prevClientNames,
-            [clientId]: `No client with ID ${clientId}, it might have been deleted.`,
-          }));
-          return;
-        }
+				if (response.status === 404) {
+					setClientNames((prevClientNames) => ({
+						...prevClientNames,
+						[clientId]: `No client with ID ${clientId}, it might have been deleted.`,
+					}));
+					return;
+				}
 
-        if (!response.ok) {
-          throw new Error(`Network response was not ok. Status: ${response.status}`);
-        }
+				if (!response.ok) {
+					throw new Error(`Network response was not ok. Status: ${response.status}`);
+				}
 
-        const clientData = await response.json();
+				const clientData = await response.json();
 
-        setClientNames((prevClientNames) => ({
-          ...prevClientNames,
-          [clientId]: `${clientData.firstName} ${clientData.lastName}`,
-        }));
-      } catch (error) {
-        console.error('Error fetching client name:', error.message);
-      }
-    };
+				setClientNames((prevClientNames) => ({
+					...prevClientNames,
+					[clientId]: `${clientData.firstName} ${clientData.lastName}`,
+				}));
+			} catch (error) {
+				console.error('Error fetching client name:', (error as Error).message);
+			}
+		};
 
-    workoutPrograms.forEach((program) => {
-      if (program.clientId && !clientNames[program.clientId]) {
-        fetchClientName(program.clientId);
-      }
-    });
-  }, [workoutPrograms, clientNames, jwtToken]);
+		workoutPrograms.forEach((program) => {
+			if (program.clientId && !clientNames[program.clientId]) {
+				fetchClientName(program.clientId);
+			}
+		});
+	}, [workoutPrograms, clientNames, jwtToken]);
 
-  useEffect(() => {
-    const foundProgram = workoutPrograms.find((item) => item.workoutProgramId === selectedWorkoutProgramId);
-    setSelectedWorkoutProgramDetails(foundProgram || null);
-  }, [selectedWorkoutProgramId, workoutPrograms]);
+	useEffect(() => {
+		const foundProgram = workoutPrograms.find((item) => item.workoutProgramId === selectedWorkoutProgramId);
+		setSelectedWorkoutProgramDetails(foundProgram || null);
+	}, [selectedWorkoutProgramId, workoutPrograms]);
 
-  const handleBoxClick = (programId: number) => {
-    if (selectedWorkoutProgramId === programId) {
-      setSelectedWorkoutProgramId(null);
-    } else {
-      setSelectedWorkoutProgramId(programId);
-      let foundProgram = workoutPrograms.find((item) => item.workoutProgramId === programId);
-      setSelectedWorkoutProgramDetails(foundProgram || null);
-      setShowExerciseForm(false);
-    }
-  };
+	const handleBoxClick = (programId: number) => {
+		if (selectedWorkoutProgramId === programId) {
+			setSelectedWorkoutProgramId(null);
+		} else {
+			setSelectedWorkoutProgramId(programId);
+			let foundProgram = workoutPrograms.find((item) => item.workoutProgramId === programId);
+			setSelectedWorkoutProgramDetails(foundProgram || null);
+			setShowExerciseForm(false);
+		}
+	};
 
-  const fshowExerciseForm = (e) => {
-    e.stopPropagation();
-    setShowExerciseForm(true);
-  };
+	const fshowExerciseForm = (e) => {
+		e.stopPropagation();
+		setShowExerciseForm(true);
+	};
 
-  const fhideExerciseForm = () => {
-    setShowExerciseForm(false);
-  };
-  
-  const handleLogout = () => {
-    window.location.href = "/login";
-  };
+	const fhideExerciseForm = () => {
+		setShowExerciseForm(false);
+	};
 
-  const fetchUpdatedWorkoutPrograms = async () => {
-    if (jwtToken !== null) {
-      try {
-        const response = await fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-            'Content-Type': 'application/json',
-          },
-        });
+	const handleLogout = () => {
+		window.location.href = "/login";
+	};
 
-        if (!response.ok) {
-          throw new Error(`Network response was not ok. Status: ${response.status}`);
-        }
+	const fetchUpdatedWorkoutPrograms = async () => {
+		if (jwtToken !== null) {
+			try {
+				const response = await fetch('https://afefitness2023.azurewebsites.net/api/WorkoutPrograms', {
+					headers: {
+						Authorization: `Bearer ${jwtToken}`,
+						'Content-Type': 'application/json',
+					},
+				});
 
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('Error fetching updated workout programs:', error.message);
-        throw error;
-      }
-    }
-  };
+				if (!response.ok) {
+					throw new Error(`Network response was not ok. Status: ${response.status}`);
+				}
 
-  const handleAddExercise = async (exercise: Exercise) => {
-    try {
-      // Ensure there's a selected workout program
-      if (!selectedWorkoutProgramDetails) {
-        console.error('No selected workout program.');
-        return;
-      }
+				const data = await response.json();
+				return data;
+			} catch (error) {
+				console.error('Error fetching updated workout programs:', error.message);
+				throw error;
+			}
+		}
+	};
 
-      const response = await fetch(`https://afefitness2023.azurewebsites.net/api/Exercises/Program/${selectedWorkoutProgramDetails.workoutProgramId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify(exercise),
-      });
+	const handleAddExercise = async (exercise: Exercise) => {
+		try {
+			// Ensure there's a selected workout program
+			if (!selectedWorkoutProgramDetails) {
+				console.error('No selected workout program.');
+				return;
+			}
 
-      if (!response.ok) {
-        throw new Error(`Error adding exercise. Status: ${response.status}`);
-      }
+			const response = await fetch(`https://afefitness2023.azurewebsites.net/api/Exercises/Program/${selectedWorkoutProgramDetails.workoutProgramId}`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${jwtToken}`,
+				},
+				body: JSON.stringify(exercise),
+			});
 
-      // Fetch updated list of workout programs
-      const updatedPrograms = await fetchUpdatedWorkoutPrograms();
-      setWorkoutPrograms(updatedPrograms);
+			if (!response.ok) {
+				throw new Error(`Error adding exercise. Status: ${response.status}`);
+			}
 
-      fhideExerciseForm();
-    } catch (error) {
-      console.error('Error adding exercise:', error.message);
-    }
+			// Fetch updated list of workout programs
+			const updatedPrograms = await fetchUpdatedWorkoutPrograms();
+			setWorkoutPrograms(updatedPrograms);
 
-  };
+			fhideExerciseForm();
+		} catch (error) {
+			console.error('Error adding exercise:', error.message);
+		}
 
-
+	};
 
 
-  return (
-    <div className="program-container">
-      {workoutPrograms.map((program) => (
-        <div
-          key={program.workoutProgramId}
-          onClick={() => handleBoxClick(program.workoutProgramId)}
-          className={`col-md-6 mb-4 client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
-          style={{
-            backgroundColor: program.color,
-            backgroundImage: `linear-gradient(to bottom right, ${program.color}, white 90%)`,
-          }}
-        >
-          <div className="card" style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
-            <div className="card-body">
-              <h1 className="card-title">{`${program.name}`}</h1>
-              <p className="card-text">Description: {program.description}</p>
-              <p className="card-text">Amount of Exercises: {program.exercises?.length}</p>
-              <p className="card-text">Client: {program.clientId ? (clientNames[program.clientId] || 'Loading...') : 'No client affiliated with program'}</p>
 
-              {selectedWorkoutProgramId === program.workoutProgramId && (
-                <div>
-                  {(selectedWorkoutProgramDetails?.exercises && selectedWorkoutProgramDetails.exercises.length !== 0) && (
-                    <h2 className="mt-3">Exercises:</h2>
-                  )}
-                  {selectedWorkoutProgramDetails?.exercises?.map((exercise, index) => (
-                    <div key={index} className="mb-3">
-                      <h3>{`${exercise.name ? (exercise.name) : "!Exercise has no name!"}`}</h3>
-                      <p>Description: {exercise.description}</p>
-                      <p>Reps/Time: {exercise.repetitions ? (exercise.repetitions) : exercise.time}</p>
-                      <p>Sets: {exercise.sets ? (exercise.sets) : exercise.time}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
 
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
-                padding: '10px',
-              }}
-            >
-              <button
-                className="btn btn-success"
-                onClick={(e) => fshowExerciseForm(e)}
-                style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '15px', borderRadius: '20%' }}
-              >
-                Add Exercise
-              </button>
-            </div>
-          </div>
-        </div>
-      ))}
-      {showExerciseForm && (
-        <ExerciseForm
-          onClose={fhideExerciseForm}
-          onAddExercise={handleAddExercise}
-          onRefetchWorkoutPrograms={fetchUpdatedWorkoutPrograms}
-        />
-      )}
-    </div>
-  );
+	return (
+		<div className="program-container">
+			{workoutPrograms.map((program) => (
+				<div
+					key={program.workoutProgramId}
+					onClick={() => handleBoxClick(program.workoutProgramId)}
+					className={`col-md-6 mb-4 client-box ${selectedWorkoutProgramId === program.workoutProgramId ? 'selected' : ''}`}
+					style={{
+						backgroundColor: program.color,
+						backgroundImage: `linear-gradient(to bottom right, ${program.color}, white 90%)`,
+					}}
+				>
+					<div className="card" style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%' }}>
+						<div className="card-body">
+							<h1 className="card-title">{`${program.name}`}</h1>
+							<p className="card-text">Description: {program.description}</p>
+							<p className="card-text">Amount of Exercises: {program.exercises?.length}</p>
+							<p className="card-text">Client: {program.clientId ? (clientNames[program.clientId] || 'Loading...') : 'No client affiliated with program'}</p>
+
+							{selectedWorkoutProgramId === program.workoutProgramId && (
+								<div>
+									{(selectedWorkoutProgramDetails?.exercises && selectedWorkoutProgramDetails.exercises.length !== 0) && (
+										<h2 className="mt-3">Exercises:</h2>
+									)}
+									{selectedWorkoutProgramDetails?.exercises?.map((exercise, index) => (
+										<div key={index} className="mb-3">
+											<h3>{`${exercise.name ? (exercise.name) : "!Exercise has no name!"}`}</h3>
+											<p>Description: {exercise.description}</p>
+											<p>Reps/Time: {exercise.repetitions ? (exercise.repetitions) : exercise.time}</p>
+											<p>Sets: {exercise.sets ? (exercise.sets) : exercise.time}</p>
+										</div>
+									))}
+								</div>
+							)}
+						</div>
+
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								position: 'absolute',
+								bottom: 0,
+								left: 0,
+								right: 0,
+								padding: '10px',
+							}}
+						>
+							<button
+								className="btn btn-success"
+								onClick={(e) => fshowExerciseForm(e)}
+								style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '15px', borderRadius: '20%' }}
+							>
+								Add Exercise
+							</button>
+						</div>
+					</div>
+				</div>
+			))}
+			{showExerciseForm && (
+				<ExerciseForm
+					onClose={fhideExerciseForm}
+					onAddExercise={handleAddExercise}
+					onRefetchWorkoutPrograms={fetchUpdatedWorkoutPrograms}
+				/>
+			)}
+		</div>
+	);
 
 }
 export default WorkoutList;

@@ -150,7 +150,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 				console.error('No selected workout program.');
 				return;
 			}
-
+			console.log(exercise)
 			const response = await fetch(`https://afefitness2023.azurewebsites.net/api/Exercises/Program/${selectedWorkoutProgramDetails.workoutProgramId}`, {
 				method: 'POST',
 				headers: {
@@ -209,31 +209,32 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ jwtToken }) => {
 											<p>Reps/Time: {exercise.repetitions ? (exercise.repetitions) : exercise.time}</p>
 											<p>Sets: {exercise.sets ? (exercise.sets) : exercise.time}</p>
 										</div>
+
 									))}
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											position: 'relative',
+											bottom: 0,
+											left: 0,
+											right: 0,
+											top: 10,
+										}}>
+										<button
+											className="btn btn-success"
+											onClick={(e) => fshowExerciseForm(e)}
+											style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '15px', borderRadius: '20%' }}
+										>
+											Add Exercise
+										</button>
+									</div>
 								</div>
 							)}
 						</div>
 
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-								position: 'absolute',
-								bottom: 0,
-								left: 0,
-								right: 0,
-								padding: '10px',
-							}}
-						>
-							<button
-								className="btn btn-success"
-								onClick={(e) => fshowExerciseForm(e)}
-								style={{ backgroundColor: '#1b4027', color: 'white', fontSize: '15px', borderRadius: '20%' }}
-							>
-								Add Exercise
-							</button>
-						</div>
+
 					</div>
 				</div>
 			))}

@@ -1,6 +1,6 @@
 .client-box {
   border: 5px solid #1b4027;
-  padding: 10px;
+  padding: 30px;
   cursor: pointer;
   width: 230px;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background 0.3s ease-in-out, border-color 0.3s ease-in-out;
@@ -11,22 +11,22 @@
 
 .client-box:hover {
   background-color: #00ff51;
-  border-color: #00ff51; /* Change border color on hover */
-  background-size: 200% 200%; /* Adjust the size for hover */
-  transform: scale(1.05); /* Increase scale on hover */
+  border-color: #00ff51; 
+  background-size: 200% 200%; 
+  transform: scale(1.01); 
 }
 
 .client-box.selected {
   border-color: rgb(58, 240, 12);
-  transform: scale(1.1);
+  transform: scale(1.0);
   opacity: 0.8;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  background-color: #00ff51; /* Change background color on selected */
-  background-size: 200% 200%; /* Adjust the size for selected */
+  background-color: #00ff51; 
+  background-size: 200% 200%; 
 }
 
 .client-box.selected:hover {
-  transform: scale(1.1); /* Increase scale on hover for selected state */
+  transform: scale(1.0); 
 }
 
 .card {

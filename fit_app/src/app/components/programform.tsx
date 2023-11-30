@@ -2,17 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select, MenuItem, InputLabel, FormControl, ListItemText, } from '@mui/material';
 import User from '../types/user';
 import WorkoutProgram from '../types/WorkoutProgram';
+import Exercise from '../types/Exercise';
 
 interface ProgramFormProps {
-	allExercises: Exercise[];
 	isOpen: boolean;
 	onRequestClose: () => void;
 	client: User | null;
-	jwtToken: string|null;
-
+	jwtToken: string | null;
 }
 
-const ProgramForm: React.FC<ProgramFormProps> = ({ allExercises, isOpen, onRequestClose, client, jwtToken }) => {
+const ProgramForm: React.FC<ProgramFormProps> = ({ isOpen, onRequestClose, client, jwtToken }) => {
 	const [formData, setFormData] = useState<WorkoutProgram>({
 		workoutProgramId: 0,
 		name: '',
@@ -23,9 +22,33 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ allExercises, isOpen, onReque
 		color: '#ffffff'
 	});
 
+	const [allExercises, setAllExercises] = useState<string[]>([]);
+
 	useEffect(() => {
 		setFormData((prevData) => ({ ...prevData, clientid: client?.userId || '' }));
 	}, [client]);
+
+	useEffect(() => {
+		fetch('https://afefitness2023.azurewebsites.net/api/Exercises', {
+			headers: {
+				Authorization: `Bearer ${jwtToken}`,
+				'Content-Type': 'application/json',
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`Network response was not ok. Status: ${response.status}`);
+				}
+				return response.json();
+			})
+			.then((data) => {
+				const exerciseNames = data.map((exercise: any) => exercise.name);
+				setAllExercises(exerciseNames);
+			})
+			.catch((error) => {
+				console.error('Error fetching exercises:', error.message);
+			});
+	}, [jwtToken]);
 
 	const handleChange = (e: React.ChangeEvent<{ name?: string; value: unknown }>) => {
 		const { name, value } = e.target;
@@ -77,12 +100,11 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ allExercises, isOpen, onReque
 						name="exercises"
 						multiple
 						value={formData.exercises}
-						// onChange={handleChange} // TODO: Implement correctly
-						renderValue={(selected) => (selected as []).join(', ')}
+						renderValue={(selected) => (selected).join(', ')}
 					>
-						{allExercises.map((exercise) => (
-							<MenuItem key={exercise.name} value={exercise.name}>
-								<ListItemText primary={exercise.name} />
+						{allExercises.map((exercise, index) => (
+							<MenuItem key={index} value={exercise}>
+								<ListItemText primary={exercise} />
 							</MenuItem>
 						))}
 					</Select>
@@ -98,40 +120,6 @@ const ProgramForm: React.FC<ProgramFormProps> = ({ allExercises, isOpen, onReque
 			</DialogActions>
 		</Dialog>
 	);
-
-	async function getServerSideProps() {
-		try {
-			const exercisesResponse = await fetch('https://afefitness2023.azurewebsites.net/api/Exercises', {
-				headers: {
-					Authorization: `Bearer ${jwtToken}`,
-					'Content-Type': 'application/json',
-				},
-			});
-
-			if (!exercisesResponse.ok) {
-				throw new Error(`Network response was not ok. Status: ${exercisesResponse.status}`);
-			}
-
-			const exercisesData = await exercisesResponse.json();
-			const exerciseNames = exercisesData.map((exercise: any) => exercise.name);
-
-			return {
-				props: {
-					allExercises: exerciseNames,
-				},
-			};
-		} catch (error) {
-			console.error('Error fetching exercises:', error);
-
-			return {
-				props: {
-					allExercises: [],
-				},
-			};
-		}
-	}
 };
-
-
 
 export default ProgramForm;
